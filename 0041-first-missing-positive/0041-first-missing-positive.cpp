@@ -1,16 +1,21 @@
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
-        //BRUTE FORCE APPROACH
-        map<int, int> freq;
-        for(int num : nums) {
-            if(num > 0) freq[num]++;
+
+        for(int i = 0; i < nums.size();) {
+            if(nums[i] > 0 && nums[i]-1 < nums.size() && nums[i] != nums[nums[i] - 1]) {
+            //make sure to place nums[i] in index nums[i] - 1 as long as the index is valid
+                swap(nums[i], nums[nums[i] - 1]);
+            }
+            else
+                i++;
         }
-        int toReturn = 1;
-        for(auto it : freq) {
-            if(it.first != toReturn) return toReturn;
-            toReturn++;
+        
+        for(int i = 0; i < nums.size(); i++) {
+            if(nums[i] != i+1)
+                return i+1;
         }
-        return toReturn;
+        
+        return nums.size() + 1;
     }
 };
