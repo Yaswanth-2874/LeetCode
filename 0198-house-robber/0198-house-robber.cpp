@@ -13,6 +13,6 @@ class Solution {
 public:
     int rob(vector<int>& nums) {
         vector<int> memo(nums.size(), -1);
-        return max(solve(nums, memo, 0), solve(nums, memo, 1));
+        return solve(nums, memo, 0);
     }
 };
