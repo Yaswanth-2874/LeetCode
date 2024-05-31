@@ -1,15 +1,24 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        unordered_map<int, int> freq;
+        int xorResult = 0;
         for(int num : nums) {
-            freq[num]++;
+            xorResult ^= num;
         }
-        vector<int> ans;
+        int initialguess = 1;
+        while(true) {
+            if(initialguess & xorResult) break;
+            initialguess <<= 1;
+        }
+        int secondValue = 0;
+        for(int num : nums ) {
+            if(num & initialguess)
+                secondValue ^= num;
+        }
+        int firstValue = xorResult ^ secondValue;
         
-        for(auto& it : freq) {
-            if(it.second == 1) ans.push_back(it.first);
-        }
-        return ans;
+        return {firstValue, secondValue};
+        
     }
 };
+
