@@ -11,23 +11,22 @@
 class Solution {
 public:
     ListNode* mergeNodes(ListNode* head) {
-        ListNode* mergedNode = new ListNode(0);
-        ListNode* storedNode = mergedNode;
+        ListNode* index = head, *traversal = head->next;
         int currentSum = 0;
-        head = head->next;
         
-        while(head) {
-            if(head->val) {
-                currentSum += head->val;
+        while(traversal) {
+            if(traversal -> val) {
+                currentSum += traversal->val;
             }
             else {
-                mergedNode->next = new ListNode(currentSum);
+                index->val = currentSum;
                 currentSum = 0;
-                mergedNode = mergedNode->next;
+                if(!traversal->next)
+                    index->next = NULL;
+                index = index->next;
             }
-            head = head->next;
+            traversal = traversal->next;
         }
-        return storedNode->next;
+        return head;
     }
 };
-
