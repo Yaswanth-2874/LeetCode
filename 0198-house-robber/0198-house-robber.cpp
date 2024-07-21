@@ -1,18 +1,19 @@
 class Solution {
-    int solve(vector<int>& nums, vector<int>& memo, int currentHouse) {
-        if(currentHouse >= nums.size()) return 0;
-        
+    int dp(vector<int>& memo, vector<int>& nums, int currentHouse = 0) {
+        if(currentHouse >= memo.size())
+            return 0;
         if(memo[currentHouse] == -1) {
-            return memo[currentHouse] = max(
-                nums[currentHouse] + solve(nums, memo, currentHouse+2),
-                solve(nums, memo, currentHouse+1)
+            memo[currentHouse] = max(
+                nums[currentHouse] + dp(memo, nums, currentHouse + 2),
+                dp(memo, nums,currentHouse + 1)
             );
+                return memo[currentHouse];
         }
         return memo[currentHouse];
     }
 public:
     int rob(vector<int>& nums) {
         vector<int> memo(nums.size(), -1);
-        return solve(nums, memo, 0);
+        return dp(memo, nums);
     }
 };
