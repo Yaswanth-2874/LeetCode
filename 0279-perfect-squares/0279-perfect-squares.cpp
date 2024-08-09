@@ -5,8 +5,7 @@ public:
             return n;
         double root = sqrt(n);
         int largestSquareRoot = floor(root);
-        if(largestSquareRoot == sqrt(n))
-            return 1;
+     
         int minMoves = n;
         for(int i = largestSquareRoot; i >= 1; i--) {
             int currentMoves = n/(i*i);
