@@ -1,29 +1,27 @@
 class Solution {
-    int findMinHp(vector<vector<int>>& dungeon, vector<vector<int>>& memo, int i = 0, int j = 0) {
-        if(i == memo.size() - 1 && j == memo[i].size() - 1)
-            return memo[i][j] = dungeon[i][j] >= 0 ? 1 : abs(dungeon[i][j]) + 1;
-        
-        if(i >= memo.size() || j >= memo[i].size())
-            return INT_MAX;
+    int rows, columns;
+    
+    int findMinHp(vector<vector<int>>& memo, vector<vector<int>>& dungeon, int i = 0, int j = 0) {
+        if(i == rows - 1 && j == columns - 1)
+            return dungeon[i][j] >= 0 ? 1 : abs(dungeon[i][j]) + 1;
+        if(i >= rows || j >= columns)
+            return 1e9;
         
         if(memo[i][j] != -1)
             return memo[i][j];
         
-        int rightDirection = findMinHp(dungeon, memo, i, j+1);
-        int leftDirection = findMinHp(dungeon, memo, i+1, j);
+        int left = findMinHp(memo, dungeon, i, j+1);
+        int down = findMinHp(memo, dungeon, i+1, j);
         
-        int ans = min(leftDirection, rightDirection) - dungeon[i][j];
+        int ans = min(left, down) - dungeon[i][j];   
+        
         return memo[i][j] = ans <= 0 ? 1 : ans;
     }
 public:
     int calculateMinimumHP(vector<vector<int>>& dungeon) {
-        vector<vector<int>> memo(dungeon.size(), vector<int> (dungeon[0].size(), -1));
-        int ans = findMinHp(dungeon, memo);
-        // for(auto list : memo) {
-        //     for(auto num : list)
-        //         cout<<num<<" ";
-        //     cout<<endl;
-        // }
-        return ans;
+        rows = dungeon.size();
+        columns = dungeon[0].size();
+        vector<vector<int>> memo(rows, vector<int> (columns, -1));
+        return findMinHp(memo, dungeon);
     }
 };
