@@ -11,9 +11,7 @@ class Solution {
         int possibilities = 0;
         
         for(int i = 0; i < nums.size(); i++) {
-            sum += nums[i];
-            possibilities += findPossible(nums, target, sum);
-            sum -= nums[i];
+            possibilities += findPossible(nums, target, sum + nums[i]);
         }
         
         return memo[sum] = possibilities;
