@@ -5,13 +5,11 @@ public:
         sort(s.begin(), s.end());
         int left = 0, maxContentedChildren = 0;
         
-        for(int num : g) {
-            while(left < s.size() && s[left] < num)
+        for(int num : s) {
+            if(left < g.size() && g[left] <= num) {
+                maxContentedChildren++;
                 left++;
-            if(left >= s.size())
-                return maxContentedChildren;
-            maxContentedChildren++;
-            left++;
+            }
         }
         return maxContentedChildren;
     }
