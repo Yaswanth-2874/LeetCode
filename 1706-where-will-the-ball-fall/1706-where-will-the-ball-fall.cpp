@@ -17,11 +17,11 @@ class Solution {
     }
 public:
     vector<int> findBall(vector<vector<int>>& grid) {
-        vector<int> ans;
+        vector<int> ballLandingPositions;
         memo = vector<vector<int>> (grid.size(), vector<int> (grid[0].size(), -2));
         for(int i = 0; i < grid[0].size(); i++)
-            ans.push_back(findEndCol(grid, 0, i));
+            ballLandingPositions.push_back(findEndCol(grid, 0, i));
         
-        return ans;
+        return ballLandingPositions;
     }
 };
