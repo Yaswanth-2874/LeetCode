@@ -18,7 +18,9 @@ public:
         
         while(head) {
             while(head && numbersToBeDeleted.find(head->val) != numbersToBeDeleted.end()) {
+                ListNode *temp = head;
                 head = head->next;
+                delete temp;
             }
             dummy->next = head;
             dummy = dummy->next;
