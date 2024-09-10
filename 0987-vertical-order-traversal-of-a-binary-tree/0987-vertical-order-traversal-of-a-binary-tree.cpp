@@ -10,25 +10,25 @@
  * };
  */
 class Solution {
-    map<int, vector<pair<int, int>>> verticalTraversalMap;
+    map<int, multiset<pair<int, int>>> verticalTraversalMap;
     vector<vector<int>> verticalTraversals;
     
-    void traverse(TreeNode* root, int x = 0, int depth = 0) {
-         if(!root)
-            return;
-        traverse(root->left, x-1, depth+1);
-        verticalTraversalMap[x].push_back({depth, root->val});
-        traverse(root->right, x+1, depth+1);
+    void traverse(TreeNode* root, int horizontalDistance = 0, int depthLevel = 0) {
+        if (!root) return;
+      
+        verticalTraversalMap[horizontalDistance].insert({depthLevel, root->val});
+        traverse(root->left, horizontalDistance - 1, depthLevel + 1);
+        traverse(root->right, horizontalDistance + 1, depthLevel + 1);
     }
+
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
         traverse(root);
-        for(auto& it : verticalTraversalMap) {
-            vector<pair<int, int>> currentHorizontal = it.second;
-            sort(currentHorizontal.begin(), currentHorizontal.end());
+        for (auto& it : verticalTraversalMap) {
             vector<int> traversal;
-            for(auto& [_, num] : currentHorizontal)
+            for (auto& [_, num] : it.second) {
                 traversal.push_back(num);
+            }
             verticalTraversals.push_back(traversal);
         }
         return verticalTraversals;
