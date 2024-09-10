@@ -1,24 +1,24 @@
 class Solution {
-    int calculateNumSquares(int n, vector<int>& memo) {
-        if(memo[n] != -1)
-            return memo[n];
-        if(n < 4)
-            return memo[n] = n;
-        
-        double root = sqrt(n);
-        int largestSquareRoot = floor(root);
-     
-        int minMoves = n;
-        for(int i = largestSquareRoot; i >= 1; i--) {
-            int currentMoves = n/(i*i);
-            currentMoves += calculateNumSquares(n % (i * i), memo);
-            minMoves = min(minMoves, currentMoves);
-        }
-        return memo[n] = minMoves;
-    }
 public:
     int numSquares(int n) {
-        vector<int> memo(n+1, -1);
-        return calculateNumSquares(n, memo);
+        if(n < 4)
+            return n;
+        
+        vector<int> minSquares(n+1);
+        for(int i = 0; i < 4; i++)
+            minSquares[i] = i;
+        
+        for(int i = 4; i <= n; i++) {
+            int root = sqrt(i);
+            int moves = i;
+            
+            for(int j = root; j >= 1; j--) {
+                int squareNumber = j * j;
+                moves = min(minSquares[i - squareNumber], moves);
+            }
+            minSquares[i] = moves + 1;
+        }
+        
+        return minSquares[n];
     }
 };
