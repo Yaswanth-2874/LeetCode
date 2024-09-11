@@ -1,24 +1,26 @@
 class Solution {
-    int findMinJumps(vector<int>& nums, vector<int>& memo, int index = 0) {
-        int minSteps = INT_MAX;
-        if(nums.size() - 1 <= index) {
-            return 0;
-        }
-        
-        if(memo[index] != -1)
-            return memo[index];
-        
-        int maxSteps = nums[index];
-        for(int i = maxSteps; i >= 1; i--) {
-            int steps = findMinJumps(nums, memo, index + i);
-            if(steps != -1)
-                minSteps = min(1 + steps, minSteps);
-        }
-        return memo[index] = (minSteps == INT_MAX ? -1 : minSteps);
-    }
 public:
     int jump(vector<int>& nums) {
-        vector<int> memo(nums.size(), -1);
-        return findMinJumps(nums, memo);
+        vector<int> minJumps(nums.size(), INT_MAX);
+        int targetPlace = nums.size() - 1;
+        
+        minJumps[targetPlace] = 0;
+        
+        for(int index = targetPlace - 1; index >= 0; index--) {
+            int maxJump = nums[index];
+            while(maxJump >= 1) {
+                int destination = index + maxJump;
+                // cout<<destination<<" "<<maxJump<<endl;
+                if(destination >= targetPlace) {
+                    minJumps[index] = 1;
+                    break;
+                } else if(minJumps[destination] != INT_MAX) {
+                    minJumps[index] = min(1 + minJumps[destination], minJumps[index]);
+                }
+                maxJump--;
+            }
+        }
+        
+        return minJumps[0];
     }
 };
