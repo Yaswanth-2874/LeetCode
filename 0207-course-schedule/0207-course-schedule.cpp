@@ -1,41 +1,36 @@
 class Solution {
-    bool detectCycle(vector<vector<int>>& graph, vector<int>& indegree) {
-        int courses = graph.size();
-        queue<int> q;
-        int size = 0;
+    bool detectCycle(vector<vector<int>>& graph, vector<int>& visited, int index) {
+        if(visited[index] == 1) {
+            return true;
+        }
+        if(visited[index] == 2) {
+            return false;
+        }  
+        visited[index] = 1;
         
-        for(int i = 0; i < courses; i++) {
-            if(indegree[i] == 0)
-                q.push(i);
+        for(int child : graph[index]) {
+            if(detectCycle(graph, visited, child))
+                return true;
         }
         
-        while(!q.empty()) {
-            int parent = q.front();
-            q.pop();
-            size++;
-            
-            for(int child : graph[parent]) {
-                indegree[child]--;
-                if(indegree[child] == 0)
-                    q.push(child);
-            }
-        }
-        return size == indegree.size();        
+        visited[index] = 2;
+        return false;        
     }
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> graph(numCourses);
-        vector<int> inDegree(numCourses);
+        vector<int> visited(numCourses, 0);
         
         for(auto& prerequisite : prerequisites) {
             int parent = prerequisite[1];
             int child = prerequisite[0];
             
             graph[parent].push_back(child);
-            inDegree[child]++;
         }
-        
-        return detectCycle(graph, inDegree);
-        
+        bool cyclePresent = false;
+        for(int i = 0; i < numCourses; i++) {
+            cyclePresent |= detectCycle(graph, visited, i);
+        }
+        return !cyclePresent;
     }
 };
