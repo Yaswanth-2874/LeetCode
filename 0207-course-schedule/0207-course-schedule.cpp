@@ -2,7 +2,7 @@ class Solution {
     bool detectCycle(vector<vector<int>>& graph, vector<int>& indegree) {
         int courses = graph.size();
         queue<int> q;
-        vector<int> topoSort;
+        int size = 0;
         
         for(int i = 0; i < courses; i++) {
             if(indegree[i] == 0)
@@ -12,14 +12,15 @@ class Solution {
         while(!q.empty()) {
             int parent = q.front();
             q.pop();
-            topoSort.push_back(parent);
+            size++;
+            
             for(int child : graph[parent]) {
                 indegree[child]--;
                 if(indegree[child] == 0)
                     q.push(child);
             }
         }
-        return topoSort.size() == indegree.size();        
+        return size == indegree.size();        
     }
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
@@ -27,8 +28,8 @@ public:
         vector<int> inDegree(numCourses);
         
         for(auto& prerequisite : prerequisites) {
-            int parent = prerequisite[0];
-            int child = prerequisite[1];
+            int parent = prerequisite[1];
+            int child = prerequisite[0];
             
             graph[parent].push_back(child);
             inDegree[child]++;
