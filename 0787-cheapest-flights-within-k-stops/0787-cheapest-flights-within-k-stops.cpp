@@ -37,13 +37,12 @@ public:
         this->n = n;
         vector<vector<pii>> flightMap(n);
         for(auto flight : flights) {
-            for(auto info : flight) {
-                int source = flight[0];
-                int destination = flight[1];
-                int cost = flight[2];
-                flightMap[source].push_back({destination, cost});                
-            }
+            int source = flight[0];
+            int destination = flight[1];
+            int cost = flight[2];
+            flightMap[source].push_back({destination, cost});                
         }
+        
         return findMinCost(flightMap, src, dst, k);
         
     }
