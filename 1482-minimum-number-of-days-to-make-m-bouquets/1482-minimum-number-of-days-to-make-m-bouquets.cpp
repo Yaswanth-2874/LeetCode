@@ -1,36 +1,42 @@
 class Solution {
-    int totalBouquetsOnParticularDay(vector<int>& bloomDay, int currentDay, int k) {
-        int totalBouquets = 0;
-        int streak = 0;
-        
-        for(int bloom : bloomDay) {
-            if(bloom > currentDay)
-                streak = 0;
-            else {
-                if(streak == k - 1) {
-                    streak = 0;
-                    totalBouquets++;
-                }
-                else
-                    streak++;
+    #define all(arr) arr.begin(), arr.end()
+    int m, k;
+    
+    bool canGetRequiredBouquets(vector<int>& bloomDay, int currentDay) {
+        int obtainedBouquets = 0;
+        int currentBlooms = 0;
+        for(int bloomed : bloomDay) {
+            if(bloomed <= currentDay) {
+                currentBlooms++;
+            } else {
+                currentBlooms = 0;
+            }
+            
+            if(currentBlooms == k) {
+                obtainedBouquets++;
+                currentBlooms = 0;
             }
         }
-        return totalBouquets;
+        return obtainedBouquets >= m;
     }
 public:
     int minDays(vector<int>& bloomDay, int m, int k) {
-        int maxDay = *max_element(bloomDay.begin(), bloomDay.end());
-        int left = 0, right = maxDay;
+        int maxBouquets = bloomDay.size() / k;
+        if(maxBouquets < m)
+            return -1;
         
-        while(left <= right) {
-            int mid = left + (right - left)/ 2;
-            if(totalBouquetsOnParticularDay(bloomDay, mid, k) >= m) {
-                right = mid - 1;
-            }
+        this->m = m;
+        this->k = k;
+        
+        int minDay = 1, maxDay = *max_element(all(bloomDay));
+        
+        while(minDay <= maxDay) {
+            int currentDay = minDay + (maxDay - minDay) / 2;
+            if(canGetRequiredBouquets(bloomDay, currentDay))
+                maxDay = currentDay - 1;
             else
-                left = mid + 1;
+                minDay = currentDay + 1;
         }
-        if(left > maxDay) return -1;
-        return left;
+        return maxDay + 1;
     }
 };
