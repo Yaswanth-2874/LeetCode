@@ -2,7 +2,7 @@ class Solution {
     #define all(skill) skill.begin(), skill.end(), 0
 public:
     long long dividePlayers(vector<int>& skill) {
-        unordered_map<int, int> skillMap;
+        map<int, int> skillMap;
         long long teamChemistry = 0;
         int n = skill.size();
         int totalSkill = accumulate(all(skill));
