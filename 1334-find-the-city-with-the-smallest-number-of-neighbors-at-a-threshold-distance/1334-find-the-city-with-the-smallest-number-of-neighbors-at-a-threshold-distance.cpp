@@ -1,20 +1,10 @@
 class Solution {
+    // MADE SLIGHT OPTIMIZATION
     // SOLVING USING DIJKSTRAS ALGORITHM FOR NOW, WILL COMEBACK LATER FOR OTHER SHORTEST PATH ALGORITHMS
     #define pii pair<int, int>
     int n;
     int distanceThreshold;
-    
-    int findNeighboursFromShortestDistances(vector<int>& distancesFromCity, int sourceCity) {
-        int numberOfNeighbours = 0;
-        for(int currentCity = 0; currentCity < n; currentCity++) {
-            if(currentCity == sourceCity)
-                continue;
-            numberOfNeighbours += distancesFromCity[currentCity] <= distanceThreshold;
-        }
-        // cout<<"Neighbours for "<<sourceCity<<" : "<<numberOfNeighbours<<endl;
-        return numberOfNeighbours;
-    }
-    
+
     int findNeighbours(vector<vector<pii>>& cityRoutes, int sourceCity) {
         vector<int> distancesFromCity(n, 1e9);
         distancesFromCity[sourceCity] = 0;
@@ -35,8 +25,14 @@ class Solution {
                 }
             }
         }
-        
-        return findNeighboursFromShortestDistances(distancesFromCity, sourceCity);
+        int numberOfNeighbours = 0;
+        for(int currentCity = 0; currentCity < n; currentCity++) {
+            if(currentCity == sourceCity)
+                continue;
+            numberOfNeighbours += distancesFromCity[currentCity] <= distanceThreshold;
+        }
+        // cout<<"Neighbours for "<<sourceCity<<" : "<<numberOfNeighbours<<endl;
+        return numberOfNeighbours;
     }
 public:
     int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
