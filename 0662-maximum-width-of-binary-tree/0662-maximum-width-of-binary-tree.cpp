@@ -9,10 +9,13 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+// TRYING NOT TO USE LONG LONG
+
 class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
-        queue<pair<TreeNode*, long long>> pendingNodes;
+        queue<pair<TreeNode*, int>> pendingNodes;
         pendingNodes.push({root, 1});
         int maxWidth = 1;
         
@@ -25,16 +28,17 @@ public:
             while(size--) {
                 auto [parentNode, value] = pendingNodes.front();
                 pendingNodes.pop();
+                value -= baseValue;
                 
                 if(parentNode->left) {
-                    pendingNodes.push({parentNode->left, (long long)(value - baseValue)* 2});
-                    minLevelValue = min(minLevelValue, (int)((long long)(value - baseValue) * 2));
-                    maxLevelValue = max(maxLevelValue, (int)((long long)(value - baseValue) * 2));
+                    pendingNodes.push({parentNode->left, value* 2LL});
+                    minLevelValue = min(minLevelValue, (int) (value * 2LL));
+                    maxLevelValue = max(maxLevelValue, (int) (value * 2LL));
                 }
                 if(parentNode->right) {
-                    pendingNodes.push({parentNode->right, (long long)(value - baseValue) * 2 + 1});
-                    minLevelValue = min(minLevelValue, (int)((long long)(value - baseValue) * 2 + 1));
-                    maxLevelValue = max(maxLevelValue, (int)((long long)(value - baseValue) * 2 + 1));
+                    pendingNodes.push({parentNode->right, value * 2LL + 1});
+                    minLevelValue = min(minLevelValue, (int) (value * 2LL + 1));
+                    maxLevelValue = max(maxLevelValue, (int) (value * 2LL + 1));
                 }
             }
             maxWidth = max(maxWidth, maxLevelValue - minLevelValue + 1);
