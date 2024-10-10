@@ -1,21 +1,6 @@
 class Solution {
-    // 8 8 8 5 5 5
-    // I FEEL LIKE THERE WOULD BE BETTER APPROACH THAN THIS BINARY SEARCH
-    // PROBABLY WITH MONOTONIC STACK BUT NOT ABLE TO THINK TwT
-    // WILL GRIND MORE
-    
-    int findMaxLength(int leftIndex, vector<int>& maxVisited, vector<int>& nums) {
-        int left = leftIndex, right = maxVisited.size() - 1;
-        while(left <= right) {
-            int mid = left + (right - left)/2;
-            if(maxVisited[mid] >= nums[leftIndex])
-                left = mid + 1;
-            else
-                right = mid - 1;
-        }
-        
-        return right - leftIndex;
-    }
+    // I FEEL STUPID FOR SOLVING IT WITH BINARY SEARCH INSTEAD OF SLIDING WINDOW
+    // DAMN, SLIDING WINDOW IS SO MUCH EASIER!! WHY DIDNT I THINK ABOUT THIS
 public:
     int maxWidthRamp(vector<int>& nums) {
         vector<int> maxVisited = nums;
@@ -27,8 +12,14 @@ public:
         }
         
         int maxWidth = 0;
-        for(int i = 0; i < nums.size(); i++) {
-            maxWidth = max(maxWidth, findMaxLength(i, maxVisited, nums));
+        int left = 0;
+        
+        for(int right = 0; right < nums.size(); right++) {
+            while(nums[left] > maxVisited[right]) {
+                left++;
+            } 
+            int currentWindowSize = right - left;
+            maxWidth = max(maxWidth, currentWindowSize);
         }
         return maxWidth;
     }
