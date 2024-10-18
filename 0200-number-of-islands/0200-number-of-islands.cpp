@@ -36,18 +36,20 @@ class Solution {
     int n, m;
     vector<pair<int, int>> directions;
     
-    bool mergeNeighbours(int x, int y, vector<vector<char>>& grid, DisjointSet &ds) {
-        if(x >= n || x < 0 || y >= m || y < 0 || grid[x][y] == '0' || grid[x][y] == 'V')
-            return false;
+    void mergeNeighbours(int x, int y, vector<vector<char>>& grid, DisjointSet &ds) {
         int gridAddress = x * m + y;
-        grid[x][y] = 'V';
         for(auto& [xInc, yInc] : directions) {
-            if(mergeNeighbours(x + xInc, y + yInc, grid, ds)) {
-                int newGridAddress = (x + xInc) * m + (y + yInc);
-                ds.unionMerge(gridAddress, newGridAddress);
+            x += xInc;
+            y += yInc;
+            
+            if(!(x >= n || x < 0 || y >= m || y < 0 || grid[x][y] == '0')) {
+                int newGridAddress = x * m + y;
+                ds.unionMerge(newGridAddress, gridAddress);
             }
+            
+            x -= xInc;
+            y -= yInc;
         }
-        return true;
     }
 public:
     int numIslands(vector<vector<char>>& grid) {
@@ -58,7 +60,8 @@ public:
         
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
-                mergeNeighbours(i, j, grid, ds);
+                if(grid[i][j] == '1')
+                    mergeNeighbours(i, j, grid, ds);
             }
         }
         int islands = 0;
