@@ -1,19 +1,37 @@
 class Solution {
-    string generateString(int n) {
+    // Size of nthString is always 2^n - 1
+    // If i generate nthString time complexity always goes up exponentitally
+    // Inorder to optimise, i should not generate the nthString
+    
+    // How else could i find out the kth string?
+    
+    // EveryString is comprised of (previousString) + 1 + (inverted, reversed, previousString)
+    // Can i use divide and conquer?
+    
+    // 011 1 001
+    // 0 1 1    
+    char kthBit(int n, int k) {
         if(n == 1)
-            return "0";
-        string si = generateString(n-1);
-        si.push_back('1');
-        for(int i = si.size() - 2; i >= 0; i--) {
-            char inverted = si[i] == '0' ? '1' : '0';
-            si.push_back(inverted);
-        }
-        return si;
+            return '0';
+        
+        int length = (1 << n) - 1;
+        int mid = length/2;
+        // cout<<mid<<endl;
+        
+        if(k == mid)
+            return '1';
+        
+        if(k < mid)
+            return kthBit(n-1, k);
+            
+        int kthIndex = mid - (k - mid);
+        // cout<<kthIndex<<endl;
+
+        return kthBit(n-1, kthIndex) == '1' ? '0' : '1';
     }
+    
 public:
     char findKthBit(int n, int k) {
-        string nthString = generateString(n);
-        // cout<<nthString<<endl;
-        return nthString[k-1];
+        return kthBit(n, k-1);
     }
 };
