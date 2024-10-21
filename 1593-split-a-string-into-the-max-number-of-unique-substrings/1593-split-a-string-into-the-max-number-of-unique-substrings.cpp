@@ -8,9 +8,9 @@ class Solution {
         if(index == s.size()) {
             if(current.size())
                 return INT_MIN;
-            for(auto& st : splitSubstrings)
-                cout<<st<<" ";
-            cout<<endl;
+            // for(auto& st : splitSubstrings)
+            //     cout<<st<<" ";
+            // cout<<endl;
             maxCount = max(maxCount, (int)splitSubstrings.size());
             return 0;
         }
