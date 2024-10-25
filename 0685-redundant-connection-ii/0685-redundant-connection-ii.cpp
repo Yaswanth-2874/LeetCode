@@ -44,8 +44,7 @@ public:
             if(parents[destination] > 0) {
                 edge1 = {parents[destination], destination};
                 edge2 = {source, destination};
-                cout<<parents[destination]<<" "<<destination<<endl;
-                cout<<source<<" "<<destination<<endl;
+
                 // Remove the edge temporarily to see if this is the acutal wrong edge
                 source = destination = -1;
                 break;
@@ -61,9 +60,14 @@ public:
             int destination = edge[1];
             
             if(ds.unionMerge(source, destination) == false) {
+                // cout<<"Cycle Detected at "<<source<<" "<<destination<<endl;
+                // If there is no edge 1 it means that no node has 2 parents, so we remove the most recent node that creates cycle
+                // If edge1 is present, since i didnt remove edge1 yet, it means that edge1 creates a cycle
                 if(edge1.first)
                     return {edge1.first, edge2.second};
                 return {source, destination};
+            } else {
+                // cout<<"Merged "<<source<<" "<<destination<<endl;
             }
         }
         return {edge2.first, edge2.second};
