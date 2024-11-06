@@ -7,20 +7,32 @@
  * };
  */
 class Solution {
+    //Follow up
+    //Since all elements are positive, i will make them negative in the first traversal
+    //When i traverse the second linkedlist, i try to find a negative and return the first negative
+    void changeAllSigns(ListNode* head) {
+        ListNode *curr = head;
+        while(curr) {
+            curr->val *= -1;
+            curr = curr->next;
+        }
+    }    
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        unordered_set<ListNode*> locations;
-        ListNode *curr = headA;
+        changeAllSigns(headA);
+        ListNode* requiredNode = NULL;
+        ListNode* curr = headB;
+        
         while(curr) {
-            locations.insert(curr);
+            if(curr->val < 0) {
+                requiredNode = curr;
+                break;
+            }
             curr = curr->next;
         }
-        curr = headB;
-        while(curr) {
-            if(locations.find(curr) != locations.end())
-                return curr;
-            curr = curr->next;
-        }
-        return NULL;
+        
+        changeAllSigns(headA);
+    
+        return requiredNode;
     }
 };
