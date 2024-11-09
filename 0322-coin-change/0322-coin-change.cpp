@@ -1,19 +1,28 @@
 class Solution {
-    // PREPARING FOR MSTS LMAO
+    vector<int> memo;
+    
+    int findMinCoins(int amount, vector<int>& coins) {
+        if(amount == 0)
+            return 0;
+        if(amount < 0)
+            return -1;
+        if(memo[amount] != -2)
+            return memo[amount];
+        
+        int minCoins = INT_MAX;
+        for(int i = coins.size() - 1; i >= 0; i--) {
+            int requiredCoins = findMinCoins(amount - coins[i], coins);
+            if(requiredCoins == -1)
+                continue;
+            minCoins = min(minCoins, 1 + requiredCoins);
+        }
+        return memo[amount] = minCoins == INT_MAX ? -1 : minCoins;        
+    }
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, INT_MAX);
-        dp[0] = 0;
-        
-        for(int currentAmount = 1; currentAmount <= amount; currentAmount++) {
-            for(int coin : coins) {
-                if(coin > currentAmount || dp[currentAmount - coin] == INT_MAX)
-                    continue;
-                int cost = dp[currentAmount - coin] + 1;
-                dp[currentAmount] = min(cost, dp[currentAmount]);
-            }
-        }
-        
-        return dp[amount] == INT_MAX ? -1 : dp[amount];
+        memo = vector<int> (amount + 1, -2);
+        if(amount == 0)
+            return 0;
+        return findMinCoins(amount, coins);
     }
 };
