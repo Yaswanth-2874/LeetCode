@@ -1,53 +1,43 @@
 class Solution {
-    int n;
-    vector<vector<string>> ans;
     unordered_map<int, int> rows, cols, diag1, diag2;
+    vector<vector<string>> validPositions;
     
-    bool canPlaceQueen(vector<string>& board, int x, int y) {
-        if(rows[x] >= 1)
+    bool canPlaceQueen(int row, int col) {
+        if(rows[row] || cols[col] || diag1[row + col] || diag2[row - col])
             return false;
-        if(cols[y] >= 1)
-            return false;
-        if(diag1[x+y] >= 1)
-            return false;
-        return diag2[x-y] < 1;
+        return true;
     }
     
-    void placeQueen(vector<string>& board, int row = 0) {
-        if(row >= n) {
-            ans.push_back(board);
-            return;
+    void placeQueen(int row, int n, vector<string>& board) {
+        if(row == n) {
+            validPositions.push_back(board);
         }
-        for(int i = 0; i < n; i++) {
-            if(canPlaceQueen(board, row, i)) {
-                // cout<<"Can place queen at "<<row<<" , "<<i<<endl;
-                board[row][i] = 'Q';
-                rows[row]++;
-                cols[i]++;
-                diag1[row+i]++;
-                diag2[row-i]++;
-                
-                placeQueen(board, row+1);
-                
-                board[row][i] = '.';
-                rows[row]--;
-                cols[i]--;
-                diag1[row+i]--;
-                diag2[row-i]--;
+        for(int col = 0; col < n; col++) {
+            if(canPlaceQueen(row, col)) {
+                board[row][col] = 'Q';
+                rows[row] = 1;
+                cols[col] = 1;
+                diag1[row + col] = 1;
+                diag2[row - col] = 1;
+                placeQueen(row+1, n, board);
+                rows[row]  = 0;
+                board[row][col] = '.';
+                cols[col] = 0;
+                diag1[row + col] = 0;
+                diag2[row - col] = 0;
             }
         }
-        
     }
+     
 public:
     vector<vector<string>> solveNQueens(int n) {
-        this->n = n;
-        string row = "";
+        string boardRow = "";
         for(int i = 0; i < n; i++)
-            row.push_back('.');
+            boardRow.push_back('.');
         
-        vector<string> board(n, row);
-        placeQueen(board);
+        vector<string> board(n, boardRow);
+        placeQueen(0, n, board);
         
-        return ans;
+        return validPositions;        
     }
 };
