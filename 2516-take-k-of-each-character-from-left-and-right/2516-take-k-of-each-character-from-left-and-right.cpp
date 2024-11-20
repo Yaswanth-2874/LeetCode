@@ -1,61 +1,27 @@
-// Not my code, debugging other's code
 class Solution {
+    // testing my new macro
+    #define freqMap(firstType, input) map<firstType, int> freq; for(auto& ele : input) freq[ele]++;
 public:
-bool helper(int m,int k,vector<vector<int>>&pref,vector<vector<int>>&suff){
-     if(k==0)return  true;
-     int n=pref.size();
-
-      for(int i=0;i<m;i++){
-        vector<int>& tmp1=pref[i];
-        int idx=n-(m-i-1);
-
-        vector<int>tmp2(3,0);
-        if(idx<n &&idx>=0 )tmp2=suff[idx];
+    int takeCharacters(string s, int k) {
+        freqMap(char, s);
+        int n = s.size();
+        map<int, int> deleteFreq;
+        if(freq['a'] < k || freq['b'] < k || freq['c'] < k)
+            return -1;
         
-        bool flg2=true;
-        for(int j=0;j<3;j++)if(tmp1[j]+tmp2[j]<k)flg2=false;
-        if(flg2)return true;
+        int left = 0;
+        int maxWindowSize = 0;
 
-    }
-     bool flg=true;
-     for(int i=0;i<3;i++){
-       int idx=n-m;
-       if(idx<0 || idx>=n)return false;
-       if(suff[n-m][i]<k)flg=false;
-     } 
-     
-     if(flg)return true;
-     return false;
-}
-
-    int takeCharacters(string str, int k) {
-        vector<vector<int>>freqPref(str.length(),vector<int>(3,0));
-        vector<vector<int>>freqSuff(str.length(),vector<int>(3,0));
-        
-        vector<int>freq(3,0);
-        vector<int>freq2(3,0);
-
-        for(int i=0;i<str.length();i++){
-            freq[str[i]-'a']++;
-            freqPref[i]=freq;
-            int idx=str.length()-1-i;
-            freq2[str[idx]-'a']++;
-            freqSuff[idx] = freq2;
+        for(int right = 0; right < n; right++) {
+            deleteFreq[s[right]]++;
+            int remainingFreq = freq[s[right]] - deleteFreq[s[right]];
+            while(left <= right && remainingFreq < k) {
+                deleteFreq[s[left++]]--;
+                remainingFreq = freq[s[right]] - deleteFreq[s[right]];
+            }
+          
+            maxWindowSize = max(maxWindowSize, right - left + 1);            
         }
-
-        int s=0;
-        int e=str.length();
-        int ans=-1;
-        while(s<=e){
-              int m=s+(e-s)/2;
-              if(helper(m,k,freqPref,freqSuff)){
-                ans=m;
-                e=m-1;
-              }
-              else{
-                s=m+1;
-              }
-        }
-        return ans;
+        return n - maxWindowSize;
     }
 };
