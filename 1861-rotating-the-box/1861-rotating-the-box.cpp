@@ -1,39 +1,36 @@
 class Solution {
-    // easy question but i was testing wrong, i didnt rotate properly and i was wondering where my logic went wrong :(
+    // Cleaner submission
     
-    void fixRows(int column, int rows, int columns, vector<vector<char>>& box) {
-        int stonesBefore = 0;
+    // To simulate the effect of gravity
+    void simulateGravity(int column, int rows, int columns, vector<vector<char>>& box) {
+        int stonesFound = 0;
+        
         for(int row = 0; row < rows; row++) {
+            // If a stone is found, increase the stone count
+            // If stationary obstacle is found, then place all the available stones before it one by one
             if(box[row][column] == '#') {
-                stonesBefore++;
+                stonesFound++;
                 box[row][column] = '.';
             } else if(box[row][column] == '*') {
                 int prevRow = row - 1;
-                // cout<<"Testing before previous platforms"<<endl;
-                while(stonesBefore) {
+                while(stonesFound) {
                     box[prevRow--][column] = '#';
-                    stonesBefore--;
+                    stonesFound--;
                 }
-                // cout<<"Test successful"<<endl;
             }
         }
         
-        // cout<<"Stones before are "<<stonesBefore<<endl;
         int prevRow = rows - 1;
-        // cout<<"Testing for last rows in column "<<column<<endl;
-        // cout<<"Row value starts from "<<prevRow<<endl;
-        while(stonesBefore--) {
+        while(stonesFound--) {
             box[prevRow--][column] = '#';
-            // cout<<"Entering row value "<<prevRow<<endl;
         }
-        // cout<<"Test successful"<<endl;
     }
 public:
     vector<vector<char>> rotateTheBox(vector<vector<char>>& box) {
         int rows = box.size();
         int columns = box[0].size();
-        cout<<rows<<" "<<columns<<endl;
         
+        // To rotate the box first
         vector<vector<char>> rotatedBox(columns, vector<char> (rows, '.'));
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
@@ -41,10 +38,12 @@ public:
                 rotatedBox[j][requiredRow] = box[i][j];
             }
         }
+        // Rows and columns get swapped after rotation
         swap(rows, columns);
         
+        // Simulate gravity for each row
         for(int column = 0; column < columns; column++) {
-            fixRows(column, rows, columns, rotatedBox);
+            simulateGravity(column, rows, columns, rotatedBox);
         }
       
         return rotatedBox;
